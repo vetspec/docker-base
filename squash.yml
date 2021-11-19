@@ -1,0 +1,58 @@
+deployments:
+  MyApp1:
+    filename:
+      ./src/Dockerfile
+    context_path:
+      ./src
+    vm_size:
+      1GB
+    port_forwarding:
+    # Squash by default expects an HTTP service running on port 80.
+    # For this example the HTTP service is listening to port 3000.
+      80:3000
+    # these are built-in environment variables that you can pass to the
+    # application's container. You may also define custom environment
+    # variables from the Squash interface and use them here.
+    run_options: --hostname ${SQUASH_BRANCH_WITH_ID} --env SQUASH_BRANCH=${SQUASH_BRANCH}
+  MyApp2:
+    filename:
+      ./
+    context_path:
+      ./src
+    environment:
+    # You may also define environment variables in this section.
+    # Then add these variables within the run_options command to set
+    # them inside the docker container.
+      - SERVICE_TYPE=CRM
+    ready_wait:
+    # This will tell Squash to wait up to 50 min (3000 seconds) for a
+    # success response from the app. The count down only starts after
+    # the build process is finished.
+      3000
+    vm_size:
+      2GB
+    copy_files_build_process:
+    # This application requires loading a Solr search index during build
+    # time. We are storing the index using Squash's Assets Storage feature.
+      - /assets/solr-index/index.tar.gz ~/code/src/index.tar.gz
+    copy_files:
+    # And we can also copy files that are needed for the actual app
+    # startup process
+      - /assets/jetty.xml ~/code/jetty.xml
+    run_options: --env SERVICE_TYPE=${SERVICE_TYPE}
+  MyApp3:
+    filename:
+      ./src/docker-compose.yml
+    context_path:
+      ./src
+    subdomain_port_mapping:
+    # This is a great way to expose microservices to other apps. For
+    # this example we have an API endpoint that is listening to port
+    # 8080. Squash will make this service available from an "api"
+    # subdomain, accessible from:
+    #    api--<deployment-address>
+    # Example:
+    #    https://api--cartv3-i3xg7.squash.io
+      - api:8080
+    vm_size:
+      2GB
