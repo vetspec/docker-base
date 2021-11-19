@@ -1,0 +1,21 @@
+{
+  "name": "Docker-Boilerplate",
+  "version": "1.0.0",
+  "description": "Docker boilerplate (NodeJS + MongoDB + Nginx + Bunkerized Nginx) with Express",
+  "main": "app.js",
+  "repository": "https://github.com/dasunNimantha/Docker-Boilerplate.git",
+  "author": "dasunNimantha <dasunnimantha77@outlook.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
+  },
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
